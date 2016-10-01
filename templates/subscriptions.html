@@ -2,7 +2,30 @@
 {% block content %}
     <h2>Current Keep-Alives</h2>
     {% for subscription in subscriptions %}
+        {% if subscription.id == active %}
+        <!-- Google Code for Subscription Conversion Page -->
+        <script type="text/javascript">
+        /* <![CDATA[ */
+        var google_conversion_id = 1043847643;
+        var google_conversion_language = "en";
+        var google_conversion_format = "3";
+        var google_conversion_color = "ffffff";
+        var google_conversion_label = "tBgFCOf602oQ27Pf8QM";
+        var google_remarketing_only = false;
+        /* ]]> */
+        </script>
+        <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+        </script>
+        <noscript>
+        <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1043847643/?label=tBgFCOf602oQ27Pf8QM&amp;guid=ON&amp;script=0"/>
+        </div>
+        </noscript>
+
+        <div class="panel panel-primary">
+        {% else %}
         <div class="panel panel-default">
+        {% endif %}
             <div class="panel-heading">
                 <div class="row">
                     <strong class="col-md-6">

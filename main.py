@@ -62,16 +62,25 @@ def cancel(id):
 def create():
     """Create a subscription then redirect to the index page."""
     customer = Customer.find(users.get_current_user())
-    stripe.Subscription.create(customer=customer.stripe_id,
-                               plan="50c/qtr",
-                               source=request.form.get('token'),
-                               metadata={'description': request.form.get('description')})
-    return redirect('/subscriptions', code=302)
+    try:
+        subscription = stripe.Subscription.create(customer=customer.stripe_id,
+                                                  plan="50c/qtr",
+                                                  source=request.form.get('token'),
+                                                  metadata={'description': request.form.get('description')})
+        customer = Customer.find(users.get_current_user())
+        return render_template('subscriptions.html',
+                               active=subscription['id'],
+                               subscriptions=get_all_subscriptions(customer.stripe_id),
+                               email=customer.email,
+                               stripe_id=customer.stripe_id[4:])
+    except:
+        return redirect('/subscriptions', code=302)
 
 @app.route('/subscriptions', methods=['GET'])
 def index():
     customer = Customer.find(users.get_current_user())
     return render_template('subscriptions.html',
+                           active=None,
                            subscriptions=get_all_subscriptions(customer.stripe_id),
                            email=customer.email,
                            stripe_id=customer.stripe_id[4:])
