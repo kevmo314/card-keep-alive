@@ -1,0 +1,22 @@
+runtime: python27
+api_version: 1
+application: card-keep-alive
+threadsafe: yes
+version: auto
+
+handlers:
+- url: /subscriptions.*
+  script: main.app
+  secure: always
+  login: required
+- url: /.*
+  script: main.app
+  secure: always
+
+libraries:
+- name: ssl
+  version: latest
+- name: jinja2
+  version: "2.6"
+- name: markupsafe
+  version: "0.15"

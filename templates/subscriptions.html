@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Current Keep-Alives</h2>
+    {% for subscription in subscriptions %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <strong class="col-md-6">
+                        {{ subscription.metadata['description'] }}
+                    </strong>
+                    <div class="col-md-6 text-right">
+                        $0.50/yr
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        Recurs every {{ subscription.start | get_date }}
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <a href="/subscriptions/{{ subscription.id[4:]}}">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if not subscriptions %}
+        <div class="alert alert-info">You don't have any subscriptions. Add one below!</div>
+    {% endif %}
+    <h2>New Keep-Alive</h2>
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script type="text/javascript">
+      var handler = StripeCheckout.configure({
+        key: 'pk_live_tZrL3FTEl8QrbefzhmSyiuqb',
+        image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+        locale: 'auto',
+        token: function(token) {
+          document.getElementById('token').value = token.id;
+          document.forms['checkout'].submit();
+        }
+      });
+      function checkoutFlow() {
+        handler.open({
+            email: '{{ email }}',
+            name: document.getElementById('description').value,
+            description: '$0.50/yr',
+            amount: 50
+        });
+      }
+    </script>
+    <form action="/subscriptions" method="POST" id="checkout">
+        <div class="alert alert-warning">Make sure you have set up autopay before creating a subscription. Missing a payment and carrying a balance is much worse than a closed card. :)</div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" name="description" id="description" placeholder="United MPE -1234" required />
+            <p class="help-block">Pick something useful to identify this card, such as the card name or the last four</p>
+        </div>
+        <div class="form-group">
+            <label for="token">Payment Token</label>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="checkoutFlow()">Generate</button>
+                </span>
+                <input type="text" class="form-control" name="token" id="token" required readonly />
+            </div>
+            <p class="help-block">Click Generate to go through the Stripe checkout flow then submit this form</p>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}
