@@ -63,7 +63,7 @@ def create():
     """Create a subscription then redirect to the index page."""
     customer = Customer.find(users.get_current_user())
     stripe.Subscription.create(customer=customer.stripe_id,
-                               plan="50",
+                               plan="50c/qtr",
                                source=request.form.get('token'),
                                metadata={'description': request.form.get('description')})
     return redirect('/subscriptions', code=302)

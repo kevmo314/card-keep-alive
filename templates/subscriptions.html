@@ -9,7 +9,7 @@
                         {{ subscription.metadata['description'] }}
                     </strong>
                     <div class="col-md-6 text-right">
-                        $0.50/yr
+                        $0.50/qtr
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
         handler.open({
             email: '{{ email }}',
             name: document.getElementById('description').value,
-            description: '$0.50/yr',
+            description: '$0.50/qtr',
             amount: 50
         });
       }
